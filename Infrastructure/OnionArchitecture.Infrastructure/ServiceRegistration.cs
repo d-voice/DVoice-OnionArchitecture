@@ -8,6 +8,8 @@ using OnionArchitecture.Application.Abstractions.Services;
 using OnionArchitecture.Infrastructure.Services;
 using OnionArchitecture.Application.Abstractions.Services.AwsBedrock;
 using OnionArchitecture.Infrastructure.Services.AwsBedrock;
+using OnionArchitecture.Infrastructure.Services.AwsPolly;
+using OnionArchitecture.Application.Abstractions.Services.AwsPolly;
 
 namespace OnionArchitecture.Infrastructure;
 
@@ -52,5 +54,6 @@ public static class ServiceRegistration
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IAwsBedrockService, AwsBedrockService>();
+        services.AddTransient<IAwsPollyService, AwsPollyService>();
     }
 }
