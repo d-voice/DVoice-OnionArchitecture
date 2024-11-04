@@ -20,18 +20,12 @@ namespace OnionArchitecture.API.Controllers
         }
 
         [HttpPost("dvoice")]
-        public async Task<IActionResult> DvoiceAI([FromBody] DvoiceRequest request)
+        public async Task<IActionResult> DvoiceAI([FromForm] VoiceToAnswerModel request)
         {
             try
             {
-                Stream respondedToAIVoice = await _mediator.Send(new DVoiceCommandRequest
-                {
-                    TranscribeCommandRequest = request.TranscribeCommandRequest,
-                    Body = request.Body
-                });
-
-                var soundResponse = File(respondedToAIVoice, "audio/mpeg", "output.mp3");
-                return soundResponse;
+                Stream respondedToAIVoice = await _mediator.Send(request);
+                return File(respondedToAIVoice, request.AudioBlob.ContentType, request.AudioBlob.FileName);
             }
             catch (Exception ex)
             {

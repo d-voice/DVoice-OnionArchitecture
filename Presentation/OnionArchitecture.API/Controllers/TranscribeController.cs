@@ -31,9 +31,9 @@ namespace OnionArchitecture.API.Controllers
         }
 
         [HttpPost("uploadVoice")]
-        public async Task UploadUserVoiceAsync(IFormFile file)
+        public async Task<string> UploadUserVoiceAsync(IFormFile file)
         {
-            await _awsTranscribeService.UploadAudioAsync(file);
+            return await _awsTranscribeService.UploadAudioAsync(file);
         }
     }
 }
