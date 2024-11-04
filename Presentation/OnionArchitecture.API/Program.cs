@@ -1,11 +1,21 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using OnionArchitecture.API.Middlewares;
 using OnionArchitecture.Application;
 using OnionArchitecture.Infrastructure;
+using OnionArchitecture.Infrastructure.Configurations;
 using OnionArchitecture.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+// secret.json dosyasýný ekliyoruz
+builder.Configuration.AddJsonFile("secret.json", optional: true, reloadOnChange: true);
+
+// AwsSettings'i konfigürasyon ile baðlýyoruz
+builder.Services.Configure<AwsSettings>(builder.Configuration.GetSection("AwsSettings"));
+
+
+
 
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));

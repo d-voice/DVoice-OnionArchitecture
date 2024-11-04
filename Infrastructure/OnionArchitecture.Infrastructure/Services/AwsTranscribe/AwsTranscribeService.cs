@@ -1,16 +1,16 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.TranscribeService;
 using Amazon.TranscribeService.Model;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using OnionArchitecture.Application.Abstractions.Services.AwsTranscribe;
 using OnionArchitecture.Application.Features.Aws.Command.Transcribe;
+using OnionArchitecture.Infrastructure.Configurations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -20,14 +20,17 @@ namespace OnionArchitecture.Infrastructure.Services.AwsTranscribe
     {
         private readonly IAmazonTranscribeService _amazonTranscribeService;
         private readonly IAmazonS3 _amazonS3;
-        private static readonly string accessKey = "ASIAUSJEUDTKVYHFZEOU";
-        private static readonly string secretKey = "YfIUvgaC/QM7J68Oen3wqABQaSTjy+AIRpgLyK/0";
-        private static readonly string sessionToken = "IQoJb3JpZ2luX2VjEHYaCXVzLWVhc3QtMSJHMEUCIQDKl3hbTc0tBxU8B3pYBf14EdO9b+1tiGgVEMtiCqDZ7QIgODDThFKl4efelbc+rAc+Tr5IrnnWy2EeTN67UlwJg88qhAMI7///////////ARAAGgwzMTQxNDYyOTkwOTMiDK3evU+L6wvlmT6bdCrYAgHxAcePq6Sf+s2mHCgYyzlKGPxR5G2Zsyx77eZ5VcQ8L2OI2191/ie37BMThsQuavazooF8VXccSXFp/6qqN4h8sfx5FvnYPrSss0JFgyPO1eFR/DaDwsYWBhhJjgPxd3L+e8jqu6jCGQSRVVBSr03/Ua0wTKn73HbQuJoWUGAUwHgqh47vs8TOrNF/OnF+EuBxsG2PUcREsVCT8ORQyI0sQbSMSdrmGlDrpLDzwWdu/x0Y0L5YiGFIqicYj8YzoGxcQa9ioPup4s6z6NRixJ2zwfwH6dvfEL4RLv9QNSivkwTDec0i3M8CJEi7rnZDOWgqz8/tIZpSuS9Qo0voKPanQhPM3npQgcho913GKZ6f+KIeWas9/JkqLlP9sqlDm8Y8ms90204gdwE2hOxTQNp2n339OOmWYm94Y7kYExZvjMQ3xDnu9dxZIYFr4NE6gItVujH2SN1uMPGlo7kGOqcBYCFhhv+36OOzKHX4IqhJZ0kWLfs1gbVUs2ZCI8V+8asF38qZnhzmb0RAds8mTrbDHfa3YlZxPUqeTA6X+lFxuXkY6xrx2k5TAdwPduEMTwB3CekERRRZ6hyWdkMFheZkc/zIgUTHnGQcVlbLpyoN3meUgGQJK5N603HPkyCjrEJVO9UTNC2jnhvt0jJkPX0I4nOp7pgmPFgPgdzHHtJ87KH65WjALfI=";
-        private static readonly RegionEndpoint region = RegionEndpoint.EUWest2;
-        public AwsTranscribeService()
+        private readonly AwsSettings _awsSettings;
+
+        public AwsTranscribeService(IOptions<AwsSettings> awsSettings)
         {
-            _amazonTranscribeService = new AmazonTranscribeServiceClient(accessKey, secretKey, sessionToken, region);
-            _amazonS3 = new AmazonS3Client(accessKey, secretKey, sessionToken, region);
+            _awsSettings = awsSettings.Value;
+
+            var credentials = new SessionAWSCredentials(_awsSettings.AccessKey, _awsSettings.SecretKey, _awsSettings.SessionToken);
+            var regionEndpoint = RegionEndpoint.GetBySystemName(_awsSettings.Region);
+
+            _amazonTranscribeService = new AmazonTranscribeServiceClient(credentials, regionEndpoint);
+            _amazonS3 = new AmazonS3Client(credentials, regionEndpoint);
         }
 
         public async Task<TranscribeCommandResponse> TranscribeAudioAsync(TranscribeCommandRequest request)
@@ -121,7 +124,7 @@ namespace OnionArchitecture.Infrastructure.Services.AwsTranscribe
             {
                 var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_amazonS3, "dvoicebucket");
                 if (!bucketExists)
-                    throw new NotFoundException($"Bucket dvoicebucket does not exist.");
+                    throw new Exception($"Bucket dvoicebucket does not exist.");
 
                 var fileKey = $"UserSounds/{file.FileName}";
 

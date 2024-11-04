@@ -12,6 +12,7 @@ using OnionArchitecture.Infrastructure.Services.AwsPolly;
 using OnionArchitecture.Application.Abstractions.Services.AwsPolly;
 using OnionArchitecture.Application.Abstractions.Services.AwsTranscribe;
 using OnionArchitecture.Infrastructure.Services.AwsTranscribe;
+using OnionArchitecture.Infrastructure.Configurations;
 
 namespace OnionArchitecture.Infrastructure;
 
@@ -25,6 +26,7 @@ public static class ServiceRegistration
     
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<AwsSettings>(configuration.GetSection("AwsSettings"));
         var jwtOptions = configuration.GetSection(JwtOptions.OptionKey).Get<JwtOptions>()!;
 
         services.AddAuthentication(options =>
