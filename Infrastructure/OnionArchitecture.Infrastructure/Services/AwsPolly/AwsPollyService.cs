@@ -14,9 +14,9 @@ namespace OnionArchitecture.Infrastructure.Services.AwsPolly
     public class AwsPollyService : IAwsPollyService
     {
         private readonly AmazonPollyClient _amazonPollyClient;
-        private static readonly string accessKey = "ASIAUSJEUDTK323GGDCU";
-        private static readonly string secretKey = "XqmIj7ob5Yoqd2FM/PZ9V8zYB4O85VncacImGOMx";
-        private static readonly string sessionToken = "IQoJb3JpZ2luX2VjEDQaCXVzLWVhc3QtMSJHMEUCIHuB4U2FRiEEp9p1UQswZQnkhBfOYa163lTfx/iOzZBZAiEAqQMXLdFn2zJCQ2I8MezoDmCWdyiaDDLEyJonSITvC/gqhAMIrP//////////ARAAGgwzMTQxNDYyOTkwOTMiDG3tW0fGYoqXIXW0YyrYAhiZCdn8HPq6n1KcAqZn+orI57VYIII/tvaNGyptvTL8ZniMwTOCE1csf+nBCZp2Yk0Bw7kS0X1WuEpsnXvi+uVtWzv12X5iEwbz2hZ5FWVQMYCw1oITWijo/BKtC73BkCR8vzxLWiUGvHSHtjyaCJNK1giq4eVRZo92XqPSsdgJHWNjEb9SaCP9BkOLZOLawMmsWfxu4MrkEoE7NBZbcf/6xjOd3IXgWS6Nem/w6Uz4Y8S5/bvc23149zGRdaIexnH2DFEZ7cLnKlcDN5ZcRUkEcuoDvVMhHBCGyKbm5XXvxquyCyHp3YsA5fdKhjDz/8OMUHssWoEF7TwkrsXS3HNf2m8Y49Q0TJDjClPWIJnHdoDw5hXFI+KBgcTkeF0c8tO4npDotKdfnkwLcuiIW5zO22tb/ju1tcCGx0VkQy9MlsJ12TSJw4NxKj5QiHjb6INq1ETJmj4dMJvRlLkGOqcBiVTlsZJ9+5HiCZ4iy2NFlUoCoo5LuLb4cZuG5EJ468kgTlXuwVZP+yzkKNK1BqKEP0K1q0gy8jD2Jr5+ikbAkeh/GJet4Tnyc/Fru+TXt1FdOdZnRec6c4kvIAcvzUG4lgH5EV+tKeeGyKGOe2FMQpPAIqR14ksdEclD611PazZTP1XuDDeqH3JYqUo0wI5mutoHmSUqyGMjIF7VBxNTS85fTBhdpqk=";
+        private static readonly string accessKey = "ASIAUSJEUDTKVYHFZEOU";
+        private static readonly string secretKey = "YfIUvgaC/QM7J68Oen3wqABQaSTjy+AIRpgLyK/0";
+        private static readonly string sessionToken = "IQoJb3JpZ2luX2VjEHYaCXVzLWVhc3QtMSJHMEUCIQDKl3hbTc0tBxU8B3pYBf14EdO9b+1tiGgVEMtiCqDZ7QIgODDThFKl4efelbc+rAc+Tr5IrnnWy2EeTN67UlwJg88qhAMI7///////////ARAAGgwzMTQxNDYyOTkwOTMiDK3evU+L6wvlmT6bdCrYAgHxAcePq6Sf+s2mHCgYyzlKGPxR5G2Zsyx77eZ5VcQ8L2OI2191/ie37BMThsQuavazooF8VXccSXFp/6qqN4h8sfx5FvnYPrSss0JFgyPO1eFR/DaDwsYWBhhJjgPxd3L+e8jqu6jCGQSRVVBSr03/Ua0wTKn73HbQuJoWUGAUwHgqh47vs8TOrNF/OnF+EuBxsG2PUcREsVCT8ORQyI0sQbSMSdrmGlDrpLDzwWdu/x0Y0L5YiGFIqicYj8YzoGxcQa9ioPup4s6z6NRixJ2zwfwH6dvfEL4RLv9QNSivkwTDec0i3M8CJEi7rnZDOWgqz8/tIZpSuS9Qo0voKPanQhPM3npQgcho913GKZ6f+KIeWas9/JkqLlP9sqlDm8Y8ms90204gdwE2hOxTQNp2n339OOmWYm94Y7kYExZvjMQ3xDnu9dxZIYFr4NE6gItVujH2SN1uMPGlo7kGOqcBYCFhhv+36OOzKHX4IqhJZ0kWLfs1gbVUs2ZCI8V+8asF38qZnhzmb0RAds8mTrbDHfa3YlZxPUqeTA6X+lFxuXkY6xrx2k5TAdwPduEMTwB3CekERRRZ6hyWdkMFheZkc/zIgUTHnGQcVlbLpyoN3meUgGQJK5N603HPkyCjrEJVO9UTNC2jnhvt0jJkPX0I4nOp7pgmPFgPgdzHHtJ87KH65WjALfI=";
         private static readonly RegionEndpoint region = RegionEndpoint.EUWest2;
         public AwsPollyService()
         {

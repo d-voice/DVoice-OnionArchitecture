@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnionArchitecture.Application.Features.Aws.Command.ClaudThreeSonnet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace OnionArchitecture.Application.Abstractions.Services.AwsBedrock
 {
     public interface IAwsBedrockService
     {
-        Task<string> InvokeModelAsync(string input, string pageBody);
+        Task<ClaudThreeSonnetCommandResponse> InvokeModelAsync(ClaudThreeSonnetCommandRequest request);
     }
 
 }
