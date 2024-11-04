@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <PackageReference Include="AWSSDK.BedrockRuntime" Version="3.7.405" />
+      <PackageReference Include="AWSSDK.S3" Version="3.7.405.9" />
+      <PackageReference Include="AWSSDK.TranscribeService" Version="3.7.400.45" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-preview.4.24266.19" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.4.24266.19" />

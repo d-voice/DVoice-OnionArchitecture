@@ -19,11 +19,8 @@ namespace OnionArchitecture.Application.Features.Aws.Command.ClaudThreeSonnet
 
         public async Task<ClaudThreeSonnetCommandResponse> Handle(ClaudThreeSonnetCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _awsBedrockService.InvokeModelAsync(request.Input, request.PageBody);
-            return new()
-            {
-                Answer = response
-            };
+            var response = await _awsBedrockService.InvokeModelAsync(request);
+            return response;
         }
     }
 }
