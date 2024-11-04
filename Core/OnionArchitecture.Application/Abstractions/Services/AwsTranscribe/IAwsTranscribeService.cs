@@ -11,6 +11,6 @@ namespace OnionArchitecture.Application.Abstractions.Services.AwsTranscribe
     public interface IAwsTranscribeService
     {
         Task<TranscribeCommandResponse> TranscribeAudioAsync(TranscribeCommandRequest request);
-        Task UploadAudioAsync(IFormFile file);
+        Task<string> UploadAudioAsync(IFormFile file);
     }
 }

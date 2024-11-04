@@ -118,7 +118,7 @@ namespace OnionArchitecture.Infrastructure.Services.AwsTranscribe
             }
         }
 
-        public async Task UploadAudioAsync(IFormFile file)
+        public async Task<string> UploadAudioAsync(IFormFile file)
         {
             try
             {
@@ -138,6 +138,9 @@ namespace OnionArchitecture.Infrastructure.Services.AwsTranscribe
                         ContentType = file.ContentType
                     };
                     await _amazonS3.PutObjectAsync(request);
+
+                    var uploadedFileUrl = $"s3://dvoicebucket/{fileKey}";
+                    return uploadedFileUrl;
                 }
             }
             catch (Exception ex)

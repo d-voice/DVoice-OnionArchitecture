@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using OnionArchitecture.Application.Abstractions.Services.AwsBedrock;
 using OnionArchitecture.Application.Abstractions.Services.AwsPolly;
 using OnionArchitecture.Application.Abstractions.Services.AwsTranscribe;
+using OnionArchitecture.Application.DTOs.Dvoice;
 using OnionArchitecture.Application.Features.Aws.Command.ClaudThreeSonnet;
 using OnionArchitecture.Application.Features.Aws.Command.Polly;
 using OnionArchitecture.Application.Features.Aws.Command.Transcribe;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace OnionArchitecture.Application.Features.DVoice.Command
 {
-    public class DVoiceCommandHandler : IRequestHandler<DVoiceCommandRequest, Stream>
+    public class DVoiceCommandHandler : IRequestHandler<VoiceToAnswerModel, Stream>
     {
         private readonly IAwsTranscribeService _awsTranscribeService;
         private readonly IAwsBedrockService _awsBedrockService;
@@ -26,20 +28,28 @@ namespace OnionArchitecture.Application.Features.DVoice.Command
             _awsPollyService = awsPollyService;
         }
 
-        public async Task<Stream> Handle(DVoiceCommandRequest request, CancellationToken cancellationToken)
+        public async Task<Stream> Handle(VoiceToAnswerModel request, CancellationToken cancellationToken)
         {
             try
             {
-                TranscribeCommandResponse textFilefromVoice = await _awsTranscribeService.TranscribeAudioAsync(request.TranscribeCommandRequest);
+                var uploadedAudioUrl = await _awsTranscribeService.UploadAudioAsync(request.AudioBlob);
+
+                var transcribeCommandRequest = new TranscribeCommandRequest
+                {
+                    AudioFileUrl = uploadedAudioUrl,
+                    LanguageCode = "tr-TR"
+                };
+
+                TranscribeCommandResponse textFilefromVoice = await _awsTranscribeService.TranscribeAudioAsync(transcribeCommandRequest);
 
                 ClaudThreeSonnetCommandResponse claudeResponse = await _awsBedrockService.InvokeModelAsync(
                     new ClaudThreeSonnetCommandRequest
                     {
                         Input = textFilefromVoice.Transcription,
-                        PageBody = request.Body
+                        PageBody = request.WebBody
                     });
 
-                Stream respondedToAIVoice = await _awsPollyService.ConvertTextToSpeechAsync(
+                PollyCommandResponse respondedToAIVoice = await _awsPollyService.ConvertTextToSpeechAsync(
                     new PollyCommandRequest
                     {
                         Text = claudeResponse.Answer,
@@ -47,7 +57,7 @@ namespace OnionArchitecture.Application.Features.DVoice.Command
                         VoiceId = "Filiz"
                     });
 
-                return respondedToAIVoice;
+                return respondedToAIVoice.File;
             }
             catch (Exception ex)
             {

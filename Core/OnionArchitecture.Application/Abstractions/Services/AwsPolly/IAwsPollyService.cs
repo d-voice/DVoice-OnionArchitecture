@@ -1,4 +1,5 @@
-﻿using OnionArchitecture.Application.Features.Aws.Command.Polly;
+﻿using Microsoft.AspNetCore.Http;
+using OnionArchitecture.Application.Features.Aws.Command.Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace OnionArchitecture.Application.Abstractions.Services.AwsPolly
 {
     public interface IAwsPollyService
     {
-        Task<Stream> ConvertTextToSpeechAsync(PollyCommandRequest request);
+        Task<PollyCommandResponse> ConvertTextToSpeechAsync(PollyCommandRequest request);
     }
 }

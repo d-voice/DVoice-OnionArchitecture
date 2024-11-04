@@ -2,6 +2,7 @@
 using Amazon.Polly;
 using Amazon.Polly.Model;
 using Amazon.Runtime;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using OnionArchitecture.Application.Abstractions.Services.AwsPolly;
 using OnionArchitecture.Application.Features.Aws.Command.Polly;
@@ -25,7 +26,7 @@ namespace OnionArchitecture.Infrastructure.Services.AwsPolly
             _amazonPollyClient = new AmazonPollyClient(credentials, RegionEndpoint.GetBySystemName(_awsSettings.Region));
         }
 
-        public async Task<Stream> ConvertTextToSpeechAsync(PollyCommandRequest request)
+        public async Task<PollyCommandResponse> ConvertTextToSpeechAsync(PollyCommandRequest request)
         {
             var synthesizeRequest = new SynthesizeSpeechRequest
             {
@@ -38,7 +39,12 @@ namespace OnionArchitecture.Infrastructure.Services.AwsPolly
             try
             {
                 var synthesizerResponse = await _amazonPollyClient.SynthesizeSpeechAsync(synthesizeRequest);
-                return synthesizerResponse.AudioStream;
+
+                var audioStream = synthesizerResponse.AudioStream;
+                return new PollyCommandResponse
+                {
+                    File = audioStream,
+                };
             }
             catch (Exception ex)
             {

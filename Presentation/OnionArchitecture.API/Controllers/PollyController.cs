@@ -19,8 +19,8 @@ namespace OnionArchitecture.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ConvertTextToSpeech([FromBody] PollyCommandRequest request)
         {
-            Stream response = await _mediator.Send(request);
-            var soundResponse = File(response, "audio/mpeg", "output.mp3");
+            PollyCommandResponse response = await _mediator.Send(request);
+            var soundResponse = File(response.File, "audio/mpeg", "output.mp3");
             return soundResponse;
         }
     }
